@@ -1,0 +1,21 @@
+language: python
+
+python:
+        - 3.6
+
+notifications:
+        email: false
+
+services:
+        - mysql
+
+
+before_install:
+        - mysql -e 'CREATE DATABASE IF NOT EXISTS flask_api_test;'
+        - cd ./letitfly
+
+install:
+        - pip install -r ./requirements.txt
+
+script: 
+        - python ./manage.py test

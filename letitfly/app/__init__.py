@@ -76,7 +76,8 @@ def create_app(config_name):
                     response = {
                             'err': 'Invalid username or password, Please try again'
                             }
-                    return make_response(jsonify(response)), 401
+                    
+                    return render_template('login.html', responsecode=401, response=response)
 
             except Exception as e:
                 # Create a response containing an string error message

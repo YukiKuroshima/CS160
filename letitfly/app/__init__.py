@@ -46,6 +46,7 @@ def create_app(config_name):
     """
     @app.route('/auth', methods=['POST', 'GET'])
     def authenticate():
+        session.clear()
         if request.method == 'POST':
             print('Post auth')
             print('Email: ' + request.form.get('email'))
@@ -103,6 +104,7 @@ def create_app(config_name):
     """
     @app.route('/register', methods=['POST', 'GET'])
     def register():
+        session.clear()
         if request.method == 'POST':
             try:
                 print('POST register')
@@ -152,6 +154,7 @@ def create_app(config_name):
     def request_ride():
         # access_token = parse_access_token(request)
         # Access token found
+        
         if 'email' in session:
             # user_id = User.decode_token(request.cookies.get(''))
             # user_id = User.decode_token(access_token)

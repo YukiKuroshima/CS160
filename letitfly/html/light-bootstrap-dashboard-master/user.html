@@ -90,7 +90,9 @@
                                 <li><a href="user.html">Account Settings</a></li>
                                 <li><a href="maps.html">Request a Ride</a></li>
                                 <li class="divider"></li>
-                                <li><a href="login.html" id="logout">Logout</a></li>
+                                <li><a href="login.html" id="logout">Logout</a>
+                                    {{ session.clear() }}
+                                </li>
                               </ul>
                         </li>
 						<li class="separator hidden-lg hidden-md"></li>

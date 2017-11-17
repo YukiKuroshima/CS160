@@ -1,7 +1,7 @@
 from flask_api import FlaskAPI, status
 from flask_sqlalchemy import SQLAlchemy
 from app.models.database import db
-from app.models.users_model import User 
+from app.models.users_model import User
 from app.models.drives_model import Rides
 from flask import Blueprint, render_template, abort, request, make_response, jsonify, redirect, session, url_for # Blueprints
 
@@ -15,7 +15,7 @@ from instance.config import app_config
 def create_app(config_name):
     # creates flask application
     app = FlaskAPI(
-            __name__, 
+            __name__,
             instance_relative_config=True,
             static_url_path='/assets',
             static_folder='../html/light-bootstrap-dashboard-master/assets',
@@ -76,8 +76,8 @@ def create_app(config_name):
                     response = {
                             'err': 'Invalid username or password, Please try again'
                             }
-                    
-                    return render_template('login.html', responsecode=401, response=response)
+
+                    return render_template('login.html', responsecode=401, response="Invalid username or password, Please try again")
 
             except Exception as e:
                 # Create a response containing an string error message
@@ -145,10 +145,8 @@ def create_app(config_name):
     @app.route("/logout", methods=['POST', 'GET'])
     def logout():
         #log out of user session
-        for key in session.keys():
-            session.pop[key]
         session.clear()
-        return render_template('login.html')
+        return redirect('auth')
 
     @app.route("/request", methods=['POST', 'GET'])
     def request_ride():
@@ -208,7 +206,7 @@ def create_app(config_name):
                 # Render html with message Looking for driver to pick you up
                 # Refresh the page periodically
                 return render_template(
-                        'waitmap.html', 
+                        'waitmap.html',
                         requestedFlag=True,
                         start=ride.start_location,
                         end=ride.end_location,
@@ -228,7 +226,7 @@ def create_app(config_name):
                 # Show the rider amount they paid
                 print('Driver found')
                 return render_template(
-                        'waitmap.html', 
+                        'waitmap.html',
                         driverFoundFlag=True,
                         start=ride.start_location,
                         driverpos={'lat': ride.current_lat, 'lng': ride.current_lng},
@@ -366,7 +364,7 @@ def create_app(config_name):
             if request.method == 'POST':
                 # Driver dropping off the client
                 # Set the finish time
-                # Render to payment 
+                # Render to payment
                 # rendering must be done by the js
                 ride = Rides.query.filter_by(
                         ride_id=session['ride_id']

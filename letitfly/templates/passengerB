@@ -63,8 +63,8 @@
 
     </select>
     <br>
-    <b>Waypoints:</b> <br>
-    <i>Passenger B</i> <br>
+    <b>Passenger B</b> <br>
+    <i></i> <br>
     <select multiple id="waypoints">
       <option value="Santa Clara University, CA">Santa Clara University, CA</option>
       <option value="Civic Center, CA">Civic Center, CA</option>

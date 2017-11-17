@@ -5,6 +5,7 @@ import jwt
 from app.models.drives_model import Rides
 from datetime import datetime, timedelta
 from werkzeug.security import safe_str_cmp
+from flask import session, render_template
 
 
 class User(db.Model):
@@ -40,6 +41,11 @@ class User(db.Model):
         """Add user to database"""
         db.session.add(self)
         db.session.commit()
+
+    def logout(self):
+        """End user session"""
+        session.clear()
+        return render_template('login.html')
 
     def delete(self):
         """Delete user from database"""
@@ -130,3 +136,5 @@ class User(db.Model):
             return "Expired token. Please log in to get a new token"
         except jwt.InvalidTokenError:
             return "Invalid token. Please register or login"
+
+

@@ -7,6 +7,7 @@ class Config(object):
     CSRF_ENABLED = True
     SECRET = os.getenv('SECRET')
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')
+    # SQLALCHEMY_DATABASE_URI = 'mysql://sql3204711:sktSE5wtUP@sql3.freesqldatabase.com/sql3204711'
 
 
 class DevelopmentConfig(Config):

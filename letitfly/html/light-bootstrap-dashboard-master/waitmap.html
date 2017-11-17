@@ -73,6 +73,12 @@
 		<nav class="navbar navbar-default navbar-fixed">
             <div class="container-fluid">
                 <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example-2">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
                     <a class="navbar-brand" >Maps</a>
                 </div>
                 <div class="collapse navbar-collapse">
@@ -80,60 +86,43 @@
 
                     <ul class="nav navbar-nav navbar-right">
                         <li class="dropdown">
-                              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                              <a class="dropdown-toggle" data-toggle="dropdown">
                                     <p>
-										Dropdown
+										Account
 										<b class="caret"></b>
 									</p>
+
                               </a>
                               <ul class="dropdown-menu">
-                                <li><a href="#">Action</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something</a></li>
+                                <li><a href="user.html">Account Settings</a></li>
+                                <li><a href="maps.html">Request a Ride</a></li>
                                 <li class="divider"></li>
-                                <li><a href="#">Separated link</a></li>
+                                <li><a href="login.html" id="logout">Logout</a></li>
                               </ul>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <p>Log out</p>
-                            </a>
                         </li>
 						<li class="separator hidden-lg hidden-md"></li>
                     </ul>
                 </div>
             </div>
         </nav>
-
-        <div id="floating-panel">
-            <div>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <p>
-                        Select an Airport
-                        <b class="caret"></b>
-                        </p>
-                    </a>
-                    <ul id="end2" class="dropdown-menu">
-                        <li><a id="SFO">SFO</a></li>
-                        <li><a id="OAK">OAK</a></li>
-                        <li><a id="SJC">SJC</a></li>
-                    </ul>
-                </li>
-                <b>End: </b>
-                <select id="end">
-                    <option value="SFO">SFO</option>
-                    <option value="OAK">OAK</option>
-                    <option value="SJC">SJC</option>
-                </select>
-                <div id="duration"></div>
-            </div>
-            <div id="reqbutton"></div>
-        </div>
+        {% if requestedFlag %}
+        <p>User ride request has been sent. Now we are looking for a driver to pick you up</p>
+        {% endif %}
+        {% if driverFoundFlag %}
+        <p>Driver found!</p>
+        <p>
+        Start: {{ start }}
+        </p>
+        <p>
+        End: {{ end }}
+        <p>Driver found!</p>
+        <p id="pos">{{ driverpos }}<p>
+        Driver location: {{ driverpos.lat }}
+        Driver location: {{ driverpos.lng }}
+        </p>
+        {% endif %}
+        <div id="info"></div>
         <div id="map"></div>
-
     </div>
 </div>
 
@@ -164,6 +153,7 @@
 
 	<script src="assets/js/usermap.js"></script>
 	<script src="assets/js/lookForDriver.js"></script>
+	<script src="assets/js/driverfound.js"></script>
 
     <script>
         $().ready(function(){
@@ -175,8 +165,11 @@
             {% if requestedFlag %}
             lookForDriver.initGoogleMaps();
             {% endif %}
-
+            {% if driverFoundFlag %}
+            driverfound.initGoogleMaps({{driverpos.lat}}, {{driverpos.lng}});
+            {% endif %}
         });
     </script>
 
 </html>
+

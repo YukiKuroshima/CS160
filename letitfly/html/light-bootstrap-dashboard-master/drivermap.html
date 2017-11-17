@@ -73,67 +73,62 @@
 		<nav class="navbar navbar-default navbar-fixed">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <a class="navbar-brand" >Maps</a>
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example-2">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand">Maps</a>
                 </div>
                 <div class="collapse navbar-collapse">
-
+                   
 
                     <ul class="nav navbar-nav navbar-right">
                         <li class="dropdown">
                               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        
                                     <p>
-										Dropdown
-										<b class="caret"></b>
-									</p>
+                                        Account
+                                        <b class="caret"></b>
+                                    </p>
+
                               </a>
                               <ul class="dropdown-menu">
-                                <li><a href="#">Action</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something</a></li>
+                                <li><a href="user.html">Account Settings</a></li>
+                                <li><a href="maps.html">Request a Ride</a></li>
                                 <li class="divider"></li>
-                                <li><a href="#">Separated link</a></li>
+                                <li><a href="login.html" id="logout" action="{{ url_for('logout') }}">Logout</a></li>
                               </ul>
                         </li>
-                        <li>
-                            <a href="#">
-                                <p>Log out</p>
-                            </a>
-                        </li>
-						<li class="separator hidden-lg hidden-md"></li>
                     </ul>
                 </div>
             </div>
         </nav>
+        {% if searchFlag %}
+        {% for ride in rides %}
+        <p>{{ ride.ride_id }}: {{ ride.start_location }}</p>
+        <button onclick=acceptRide({{ ride.ride_id }}) class='btn btn-info btn-fill'>Accept</button>
+        {% endfor %}
+        {% endif %}
+        {% if pickupFlag %}
+        <p>Ride ID: <div id='ride-id'>{{ ride.ride_id }}</div></p>
+        <p>Rider Location address: <div id='start-location'>{{ ride.start_location }}</div></p>
+        <button onclick="pickupRider('{{ ride.start_location }}');" class="btn btn-info btn-fill pull-left">Picked up</button>
+        {% endif %}
+        {% if driveFlag %}
+        <button onclick="dropOff('{{ ride.end_location }}');" class="btn btn-info btn-fill pull-left">Drop off</button>
+        {% endif %}
+        <div id="info"></div>
+        
+        {% if paymentFlag %}
+        <p>Search and pick up more people?</p>
 
-        <div id="floating-panel">
-            <div>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <p>
-                        Select an Airport
-                        <b class="caret"></b>
-                        </p>
-                    </a>
-                    <ul id="end2" class="dropdown-menu">
-                        <li><a id="SFO">SFO</a></li>
-                        <li><a id="OAK">OAK</a></li>
-                        <li><a id="SJC">SJC</a></li>
-                    </ul>
-                </li>
-                <b>End: </b>
-                <select id="end">
-                    <option value="SFO">SFO</option>
-                    <option value="OAK">OAK</option>
-                    <option value="SJC">SJC</option>
-                </select>
-                <div id="duration"></div>
-            </div>
-            <div id="reqbutton"></div>
-        </div>
+        <button onclick=redirectTo('search') class='btn btn-info btn-fill'>Search</button>
+
+        {% endif %}
+
         <div id="map"></div>
-
     </div>
 </div>
 
@@ -162,21 +157,40 @@
 	<!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
 	<script src="assets/js/demo.js"></script>
 
-	<script src="assets/js/usermap.js"></script>
-	<script src="assets/js/lookForDriver.js"></script>
+    {% if searchFlag %}
+	<script src="assets/js/search.js"></script>
+    {% endif %}
+    {% if pickupFlag %}
+	<script src="assets/js/pickup.js"></script>
+    {% endif %}
+    {% if driveFlag %}
+	<script src="assets/js/drive.js"></script>
+    {% endif %}
+    {% if paymentFlag %}
+	<script src="assets/js/payment.js"></script>
+    {% endif %}
 
     <script>
         $().ready(function(){
-            <!-- Only load this when taking care of user requesting ride -->
-            {% if requestingFlag %}
-            usermap.initGoogleMaps();
+            {% if searchFlag %}
+            var data = {{ rides|tojson }};
+            search.initGoogleMaps(data);
             {% endif %}
-            <!-- Only load this after user requested a ride and waiting driver to accept (Looking for a driver to pick them up) -->
-            {% if requestedFlag %}
-            lookForDriver.initGoogleMaps();
+            {% if pickupFlag %}
+            var data = {{ ride|tojson }};
+            pickup.initGoogleMaps(data);
             {% endif %}
-
+            {% if driveFlag %}
+            var data = {{ ride|tojson }};
+            drive.initGoogleMaps(data);
+            {% endif %}
+            {% if paymentFlag %}
+            var data = {{ ride|tojson }};
+            payment.initGoogleMaps(data);
+            {% endif %}
         });
     </script>
 
 </html>
+
+

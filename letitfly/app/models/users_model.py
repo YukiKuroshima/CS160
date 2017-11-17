@@ -1,4 +1,13 @@
 from app.models.database import db
+#<<<<<<< Dev_user_wait
+from app import db
+from flask import current_app
+import jwt
+from app.models.drives_model import Rides
+from datetime import datetime, timedelta
+from werkzeug.security import safe_str_cmp
+#=======
+#>>>>>>> master
 
 
 class User(db.Model):
@@ -67,6 +76,54 @@ class User(db.Model):
         """
         return self.driver
 
+#<<<<<<< Dev_user_wait
+    def has_incompleted_ride(self):
+        """
+        Check if the user has incompleted ride
+        Return false if the user does not have any incompleted ride
+        (means all rides are completed)
+        true if user has incompleted ride
+        """
+        rides = Rides.find_ride_by_email(self.email)
+        for ride in rides:
+            if ride.is_completed() is False:
+                return True
+        return False
+
+    def generate_token(self, user_id):
+        """Generates the access token to be used as the Authorization header"""
+
+        try:
+            # set up a payload with an expiration time
+            payload = {
+                'exp': datetime.utcnow() + timedelta(hours=24),
+                'iat': datetime.utcnow(),
+                'sub': user_id
+            }
+            # create the byte string token using the payload and the SECRET key
+            jwt_string = jwt.encode(
+                payload,
+                current_app.config.get('SECRET'),
+                algorithm='HS256'
+            )
+            return jwt_string
+
+        except Exception as e:
+            # return an error in string format if an exception occurs
+            return str(e)
+
+    @staticmethod
+    def find_user_by_user_id(user_id):
+        """Find one user by user_id (Primary Key)"""
+        try:
+            return User.query.filter_by(
+                    user_id=user_id
+                    ).first()
+        except Exception as e:
+            # return an error in string format if an exception occurs
+            return str(e)
+#=======
+#>>>>>>> master
 
 def find_user_by_user_id(user_id):
     """Find one user by user_id (Primary Key)"""

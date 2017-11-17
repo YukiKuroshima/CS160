@@ -4,6 +4,10 @@ from datetime import datetime, timedelta
 from werkzeug.security import safe_str_cmp
 from app.models.users_model import User
 
+"""
+NOTE:
+This file handles user information queries from the database.
+"""
 
 def validate_password(self, password):
         """

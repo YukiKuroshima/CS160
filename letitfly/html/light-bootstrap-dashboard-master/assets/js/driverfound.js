@@ -1,6 +1,8 @@
-lookForDriver = {
-  initGoogleMaps: function(){
-    console.log("Looking for drivre js is loaded");
+driverfound = {
+  initGoogleMaps: function(lat, lng){
+    console.log("Driver found is loaded");
+    console.log("Lat: " + lat);
+    console.log("Lng: " + lng);
     var directionsService = new google.maps.DirectionsService;
     var directionsDisplay = new google.maps.DirectionsRenderer;
 
@@ -19,8 +21,17 @@ lookForDriver = {
         position: pos,
         title:"You are here!"
       });
+      driverPos = {
+        lat: lat,
+        lng: lng
+      }
+      var driverM = new google.maps.Marker({
+        position: driverPos,
+        title:"You are here!"
+      });
 
       marker.setMap(map);
+      driverM.setMap(map);
       map.setCenter(pos);
       map.setZoom(12);
     });

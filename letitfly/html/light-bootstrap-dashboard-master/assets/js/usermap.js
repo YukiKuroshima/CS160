@@ -46,7 +46,7 @@ function sendRideRequest(start, end) {
    */
     .done(function (data) {
       console.log("Json from API server " + data.message);
-      $("h3#message-place-holder").html(data.message);
+      window.location.href = "waiting";
     })
   /*
    * Excecuted when unsuccessful

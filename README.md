@@ -61,6 +61,27 @@ python manage.py test
 ```
 to run all the test cases
 
+# Database schema
+## User
+```
+{
+    “first_name”: “a”,
+    “last_name”: “a”,
+    “credit_card”: 1234,
+    “email”: “1.1@.1c12om”,
+    “driver”: true,
+    “username”: “1n1a2me”,
+    “password”: “a”
+}
+```
+## Ride
+```
+{
+    "ride_id": 1234,
+    “start_location”: “Start from here”,
+    “end_location”: “End here”
+}
+```
 # API endpoints
 
 ```

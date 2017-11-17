@@ -1,4 +1,5 @@
 from datetime import datetime
+#<<<<<<< Dev_user_wait
 from app.models.users_model import Ride
 
 """
@@ -84,3 +85,22 @@ def manipulation(args):
     """
     response = ride_request[args['request']](args) # need args to include http request
     return response
+#=======
+from app.models.drives_model import Rides
+
+
+"""
+Find all imcomplted (Not picked up yet) ride requests and
+return them as a list
+"""
+def find_all_not_picked_up_rides_in_json():
+    try:
+        rides = Rides.query.filter_by(
+                # picked_up=False
+                ).all()
+        rides_json = [ride.tojson() for ride in rides]
+        return rides_json
+    except Exception as e:
+        # return an error in string format if an exception occurs
+        return str(e)
+#>>>>>>> master

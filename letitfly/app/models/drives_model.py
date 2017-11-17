@@ -46,6 +46,7 @@ class Rides(db.Model):
     def get_self_ride_id(self):
         return self.ride_id
 
+#<<<<<<< Dev_user_wait
     def set_current_to_time_finished(self):
         self.time_finished = datetime.datetime.now()
         self.save()
@@ -92,6 +93,8 @@ class Rides(db.Model):
             rides_json.append(ride.tojson())
         return rides_json
 
+#=======
+#>>>>>>> master
     def __repr__(self):
         """Represent user by name"""
         return "{} {}".format(self.start_location, self.end_location)

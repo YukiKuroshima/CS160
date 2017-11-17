@@ -47,9 +47,9 @@
 
             <ul class="nav">
                 <li class="active">
-                    <a href="login.html">
+                    <a href="dashboard.html">
                         <i class="pe-7s-graph"></i>
-                        <p>Login</p>
+                        <p>Dashboard</p>
                     </a>
                 </li>
 
@@ -58,8 +58,37 @@
     </div>
 
     <div class="main-panel">
-      <nav class="navbar navbar-default navbar-fixed">
+        <nav class="navbar navbar-default navbar-fixed">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand">Create Account</a>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-dashboard"></i>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                           <a href="">
+                               Account
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </nav>
+
 
         <div class="content">
             <div class="container-fluid">
@@ -67,55 +96,56 @@
  					<div class="col-md-8">
                         <div class="card">
                             <div class="header">
-                                <h4 class="title">Create Account</h4>
+                            	<h4 class="title">Create Account</h4>
                             </div>
                             <div class="content">
-                                <form action="" method="post" name="register">
+                                <form action="{{ url_for('register') }}" method="post">
                                 	<div class="row">
                                         <div class="col-md-4">
-                                            <div class="form-group" id="firstname">
+                                            <div class="form-group" name="first_name">
                                                 <label>First Name</label>
-                                                <input name="firstname" class="form-control" placeholder="First name">
+                                                <input class="form-control" placeholder="Email Address">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <div class="form-group" id="lastname">
+                                            <div class="form-group" name="last_name">
                                                 <label>Last Name</label>
-                                                <input name="lastname" type="form-control" class="form-control" placeholder="Last name">
+                                                <input type="email" class="form-control" placeholder="Email Address">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <div class="form-group" id="email">
+                                            <div class="form-group" name="email">
                                                 <label for="exampleInputEmail1">Email address</label>
-                                                <input name="email" type="email" class="form-control" placeholder="Email Address">
+                                                <input type="email" class="form-control" placeholder="Email Address">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-5">
-                                            <div class="form-group" id="password">
+                                            <div class="form-group" name="password">
                                                 <label>Password</label>
-                                                <input name="password" class="form-control" placeholder="Password">
+                                                <input  class="form-control" placeholder="Password">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-5">
-                                            <div class="form-group" id="creditcard">
+                                            <div class="form-group" name="credit_card">
                                                 <label>Credit Card Number</label>
-                                                <input name="creditcard" class="form-control" placeholder="CC#">
+                                                <input class="form-control" placeholder="CC#">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-5">
-                                            <div class="form-group" id="driver">
+                                            <div class="form-group" name="driver">
                                             	<p>Are you a driver?</p>
-                                    			<input name="driver" type="checkbox" value="false"> Check if driver
+                                    			<input type="radio" name="rad" value="true">Yes
+                                    			<input type="radio" name="rad" value="false">No</br>
                                             </div>
                                         </div>
                                     </div>
@@ -132,6 +162,14 @@
 
         <footer class="footer">
             <div class="container-fluid">
+                <nav class="pull-left">
+                    <ul>
+                        <li>
+   
+                        </li>
+
+                    </ul>
+                </nav>
                 <p class="copyright pull-right">
                     &copy; <script>document.write(new Date().getFullYear())</script> <a href="http://www.creative-tim.com">Creative Tim</a>, made with love for a better web
                 </p>
@@ -165,7 +203,6 @@
 
 	<!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
 	<script src="assets/js/demo.js"></script>
-    
 
 
 </html>

@@ -1,3 +1,4 @@
+#<<<<<<< Dev_user_wait
 from flask_api import FlaskAPI, status
 from flask_sqlalchemy import SQLAlchemy
 from app.models.database import db
@@ -7,9 +8,19 @@ from flask import Blueprint, render_template, abort, request, make_response, jso
 
 # For route
 from sqlalchemy import exc
+#=======
+from flask import request
+from flask_api import FlaskAPI
+#>>>>>>> master
 
-# local import
+from app.models.database import db
+from app.routes.user_routes import authenticate, register
+from app.routes.ride_routes import request_ride, search_for_ride
 from instance.config import app_config
+
+# currently only being used by hello
+from app.models.users_model import User
+from app.models.drives_model import Rides
 
 
 def create_app(config_name):
@@ -38,13 +49,13 @@ def create_app(config_name):
     POST /authenticate
     Host: localhost:5000
     Content-Type: application/json
-
     {
         "username": "joe",
         "password": "pass"
     }
     """
     @app.route('/auth', methods=['POST', 'GET'])
+#<<<<<<< Dev_user_wait
     def authenticate():
         session.clear()
         if request.method == 'POST':
@@ -88,6 +99,10 @@ def create_app(config_name):
                 return make_response(jsonify(response)), 500
         else:
             return render_template('login.html')
+#=======
+    def auth():
+        return authenticate(request)
+#>>>>>>> master
 
     # POST /register
     """
@@ -103,6 +118,7 @@ def create_app(config_name):
     }
     """
     @app.route('/register', methods=['POST', 'GET'])
+#<<<<<<< Dev_user_wait
     def register():
         session.clear()
         if request.method == 'POST':
@@ -241,14 +257,23 @@ def create_app(config_name):
         else:
             print('Render maps.html')
             return render_template('maps.html', requestingFlag=True)
+#=======
+    def reg():
+        return register(request)
+
+    @app.route("/request", methods=['POST', 'GET'])
+    def req_ride():
+        return request_ride(request)
+
+#>>>>>>> master
 
     """
     GET /search
     Find all the imcompleted ride requests
     Only driver can access this API
-
     Return JSON: List of imcompleted ride requests
     """
+#<<<<<<< Dev_user_wait
     @app.route("/search", methods=['GET', 'POST'])
     def seach_ride():
         # Access token found
@@ -356,6 +381,15 @@ def create_app(config_name):
             response = {'err': 'No access token found'}
             status_code = status.HTTP_400_BAD_REQUEST
             return response, status_code
+#=======
+    @app.route("/search", methods=['GET'])
+    def search_ride():
+        return search_for_ride(request)
+
+    @app.route("/history", methods=['GET'])
+    def get_history():
+        return get_drive_history(request)
+#>>>>>>> master
 
     @app.route("/drive", methods=['GET', 'POST'])
     def drive():

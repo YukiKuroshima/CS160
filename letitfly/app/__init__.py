@@ -141,6 +141,15 @@ def create_app(config_name):
         else:
             return render_template('register.html')
 
+
+    @app.route("/logout", methods=['POST', 'GET'])
+    def logout():
+        #log out of user session
+        for key in session.keys():
+            session.pop[key]
+        session.clear()
+        return render_template('login.html')
+
     @app.route("/request", methods=['POST', 'GET'])
     def request_ride():
         # access_token = parse_access_token(request)

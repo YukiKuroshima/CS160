@@ -67,7 +67,7 @@
     <i></i> <br>
     <select multiple id="waypoints">
       <option value="Santa Clara University, CA">Santa Clara University, CA</option>
-      <option value="Civic Center, CA">Civic Center, CA</option>
+      <option value="City National Civic, CA">City National Civic, CA</option>
       <option value="SAP Center, CA">SAP Center, CA</option>
       <option value="Martin Luther King Library, CA">Martin Luther King Library, CA</option>
     </select>
@@ -85,7 +85,7 @@
     <div id="directions-panel"></div>
     </div>
 
-    <!-- <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAck9gozAKmXvYT3KXbkvYqV8mU9Vs7Qdk&libraries=geometry"></script> -->
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAck9gozAKmXvYT3KXbkvYqV8mU9Vs7Qdk&libraries=geometry"></script>
 
     <script>
       function initMap() {

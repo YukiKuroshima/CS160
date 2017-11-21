@@ -50,9 +50,6 @@ def create_app(config_name):
     def authenticate():
         session.clear()
         if request.method == 'POST':
-            print('Post auth')
-            print('Email: ' + request.form.get('email'))
-            print('PW: ' + request.form.get('password'))
             try:
                 # Get the user object using their email (unique to every user)
 
@@ -62,7 +59,6 @@ def create_app(config_name):
 
                 # Try to authenticate the found user using their password
                 if user and user.validate_password(request.form.get('password')):
-                    print('PW correct')
                     # Generate the access token.
                     # This will be used as the authorization header
                     access_token = user.generate_token(user.user_id)
@@ -109,13 +105,6 @@ def create_app(config_name):
         session.clear()
         if request.method == 'POST':
             try:
-                print('POST register')
-                print('firstname: ' + request.form.get('firstname'))
-                print('lastname: ' + request.form.get('lastname'))
-                print('cc: ' + request.form.get('creditcard'))
-                print('email: ' + request.form.get('email'))
-                print('driver: ' + str(True if request.form.get('driver') else False))
-                print('pw: ' + request.form.get('password'))
                 temp_user = User(
                         first_name=request.form.get('firstname'),
                         last_name=request.form.get('lastname'),
@@ -135,12 +124,10 @@ def create_app(config_name):
             except exc.OperationalError as e:
                 # SQLalchemy missing value
                 content = {'err': 'Missing value', 'info': 'Error: %s' % e}
-                print(content)
                 return render_template('register.html', content=content)
             except exc.IntegrityError as e:
                 # SQLalchemy insertion error (such as duplicate value)
                 content = {'err': 'Duplicate value', 'info': 'Error: %s' % e}
-                print(content)
                 return render_template('register.html', content=content)
         else:
             return render_template('register.html')
@@ -161,7 +148,6 @@ def create_app(config_name):
             # user_id = User.decode_token(request.cookies.get(''))
             # user_id = User.decode_token(access_token)
             # Token is valid
-            print('Logged in as: ' + session['email'])
             if request.method == 'POST':
                 # Decode access token and get user_id that
                 # belongs to the user who requested the ride
@@ -181,16 +167,15 @@ def create_app(config_name):
                         }
                 return response, status.HTTP_201_CREATED
             else:
-                print('Render maps.html')
                 return render_template('maps.html', requestingFlag=True)
+        else:
+            return render_template('maps.html', requestingFlag=True)
 
     @app.route("/waiting", methods=['GET'])
     def waiting():
         # Access token found
         if 'email' in session:
             # Token is valid
-            print('Looking for driver')
-            print('Logged in as: ' + session['email'])
             # Find client
             user = User.query.filter_by(
                     email=session['email']
@@ -200,7 +185,6 @@ def create_app(config_name):
                     customer_id=user.user_id,
                     time_finished=None
                     ).first()
-            print(ride.tojson())
 
             # If the ride.driver is null and
             # not picked up
@@ -229,7 +213,6 @@ def create_app(config_name):
                 # Show rider is picked up
                 # TODO if driver id is NOT null and picked up = True and finished_date is NOT null
                 # Show the rider amount they paid
-                print('Driver found')
                 return render_template(
                         'waitmap.html',
                         driverFoundFlag=True,
@@ -241,7 +224,6 @@ def create_app(config_name):
         # Token is invalid
         # Access token NOT found
         else:
-            print('Render maps.html')
             return render_template('maps.html', requestingFlag=True)
 
     """
@@ -256,10 +238,6 @@ def create_app(config_name):
         if 'email' in session:
             # If POST: Called when driver chooses a ride
             if request.method == 'POST':
-                print(request.data['id'])
-                print(request.data['lat'])
-                print(request.data['lng'])
-                print(type(request.data['lat']))
 
                 # request should contain driver's current location
                 # and ride_id
@@ -267,7 +245,6 @@ def create_app(config_name):
                 ride = Rides.query.filter_by(
                         ride_id=request.data['id']
                         ).first()
-                print(ride)
                 # Assign the driver to the ride
                 user = User.query.filter_by(
                         email=session['email']
@@ -296,7 +273,6 @@ def create_app(config_name):
                 if user.is_driver():
                     # If driver
                     # get all none picked up user data
-                    print('Rides')
                     rides = Rides.find_all_no_driver_assigned_rides_in_json()
                     # render html with ride_id and user locations
                     return render_template(
@@ -318,7 +294,6 @@ def create_app(config_name):
         if 'email' in session:
             # If POST: Called when driver chooses a ride
             if request.method == 'POST':
-                print(request.data)
                 # Picked up
                 # Driver can pick up a rider only if
                 # Distance between driver and rider is less than 1 mile
@@ -343,9 +318,6 @@ def create_app(config_name):
                 ride = Rides.query.filter_by(
                         ride_id=session['ride_id']
                         ).first()
-
-                print('GET /pickup Ride info')
-                print(ride.tojson())
 
                 return render_template(
                         'drivermap.html',

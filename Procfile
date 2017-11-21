@@ -1,1 +1,1 @@
-web: sh -c 'cd ./letitfly && python manage.py db init && python manage.py db migrate && python manage.py db upgrade && python run.py'
+web: sh -c 'cd ./letitfly && rm -rf migrations && python manage.py db init && python manage.py db migrate && python manage.py db upgrade && python run.py'

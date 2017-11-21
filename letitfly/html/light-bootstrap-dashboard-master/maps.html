@@ -77,6 +77,24 @@
                 </div>
                 <div class="collapse navbar-collapse">
 
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <p>
+                                        Account
+                                        <b class="caret"></b>
+                                    </p>
+
+                              </a>
+                              <ul class="dropdown-menu">
+                                <li><a href="user.html">Account Settings</a></li>
+                                <li><a href="maps.html">Request a Ride</a></li>
+                                <li class="divider"></li>
+                                <li><a href="{{ url_for('logout') }}" >Logout</a></li>
+                              </ul>
+                        </li>
+                        <li class="separator hidden-lg hidden-md"></li>
+                    </ul>
 
                     <div class="nav navbar-nav navbar-left">
         <div id="floating-panel">

@@ -42,6 +42,7 @@ def create_app(config_name):
         "password": "pass"
     }
     """
+    @app.route('/', methods=['GET'])
     @app.route('/auth', methods=['POST', 'GET'])
     def authenticate():
         session.clear()
@@ -59,11 +60,11 @@ def create_app(config_name):
                     # This will be used as the authorization header
                     access_token = generate_token(user.user_id)
                     if access_token:
-                        # redirect_to_index = redirect('/request')
-                        # response = make_response(redirect_to_index)
-                        # response.set_cookie('access_token', value=access_token.decode())
-                        # return response
-                        session['email'] = request.form.get('email')
+                        if user.is_driver:
+                            session['email'] = request.form.get('email')
+                            return redirect('search')
+                        else:
+                            session['email'] = request.form.get('email')
                         return redirect('request')
 
                 else:

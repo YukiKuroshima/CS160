@@ -173,7 +173,7 @@ def create_app(config_name):
             else:
                 return render_template('maps.html', requestingFlag=True)
         else:
-            return render_template('maps.html', requestingFlag=True)
+            return render_template('register.html', requestingFlag=True)
 
     @app.route("/waiting", methods=['GET'])
     def waiting():

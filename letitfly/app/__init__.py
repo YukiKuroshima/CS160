@@ -402,7 +402,7 @@ def create_app(config_name):
             rides = Rides.query.filter_by(customer_id=user.user_id).all()
             return render_template('table.html', rides=rides)
         else:
-            redirect('auth')
+            return redirect('auth')
 
     @app.route("/payment", methods=['GET'])
     def payment():

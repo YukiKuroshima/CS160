@@ -4,7 +4,7 @@ function meterToMile(meter) {
 
 function calculatePrice (mile) {
   var price = 5.00 + (mile * 1.80);
-  return Math.round(price);
+  return Math.ceil(price * 100) / 100;
 }
 
 function mapAirportCode(code) {

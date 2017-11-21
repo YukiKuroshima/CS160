@@ -371,11 +371,36 @@ def create_app(config_name):
             status_code = status.HTTP_400_BAD_REQUEST
             return response, status_code
 
+
+            '''def get_ride_history():
+    access_token = parse_access_token(request)
+    if(access_token):
+        user_id = User.decode_token(access_token)
+        if not isinstance(user_id, str):
+            try:
+                rides = Rides.query.filter_by(customer_id=user_id).all()
+                rides_json = [ride.tojson() for ride in rides]
+                response = {
+                        'message': 'Ride history returned successfully',
+                        'rides': rides_json
+                }
+                status_code = status.HTTP_200_OK
+            except Exception as e:
+                response = {
+                        'err': 'Something went wrong',
+                        'info': 'Error %s' % e
+                }
+                status_code = status.HTTP_400_BAD_REQUEST
+            finally:
+                return response, status_code'''
+
     @app.route("/history", methods=['GET'])
     def history():
         if 'email' in session:
             rides = Rides.query.filter_by(customer_id=session['customer_id']).all()
-            return render_template('table.html')
+            return render_template('table.html', content=rides)
+        else:
+            redirect('auth')
 
     @app.route("/payment", methods=['GET'])
     def payment():

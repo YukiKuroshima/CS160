@@ -421,8 +421,9 @@ def create_app(config_name):
     @app.route("/history", methods=['GET'])
     def history():
         if 'email' in session:
-            rides = Rides.query.filter_by(customer_id=session['user_id']).all()
-            return render_template('table.html', content=rides)
+            user = User.query.filter_by(email=session['email']).first()
+            rides = Rides.query.filter_by(customer_id=user.user_id).all()
+            return render_template('table.html', rides=rides)
         else:
             redirect('auth')
 

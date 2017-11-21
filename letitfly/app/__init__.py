@@ -42,6 +42,7 @@ def create_app(config_name):
         "password": "pass"
     }
     """
+    @app.route('/', methods=['POST', 'GET'])
     @app.route('/auth', methods=['POST', 'GET'])
     def authenticate():
         session.clear()
@@ -96,6 +97,7 @@ def create_app(config_name):
         "password": "a"
     }
     """
+
     @app.route('/register', methods=['POST', 'GET'])
     def register():
 

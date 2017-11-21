@@ -7,8 +7,6 @@ from app.models.users_model import User
 from app.models.drives_model import Rides
 from app.methods.user_methods import *
 from app.methods.ride_methods import *
-from app.routes.user_routes import authenticate, register
-from app.routes.ride_routes import request_ride, search_for_ride
 from instance.config import app_config
 
 

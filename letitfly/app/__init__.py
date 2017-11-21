@@ -120,10 +120,10 @@ def create_app(config_name):
                 # access_token = temp_user.generate_token(temp_user.user_id)
 
                 session['email'] = request.form.get('email')
-                return redirect('auth')
+                return redirect('request')
             except Exception as e:
                 content = {'err': 'All fields must be filled out and email must be unique. %s' % e}
-                return render_template('request.html', content=content)
+                return render_template('register.html', content=content)
             '''
             except exc.OperationalError as e:
                 # SQLalchemy missing value

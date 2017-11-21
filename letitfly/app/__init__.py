@@ -32,12 +32,6 @@ def create_app(config_name):
     # initialize database with application
     db.init_app(app)
 
-    @app.before_request
-    def before_request():
-        if request.url.startswith('http://'):
-            url = request.url.replace('http://', 'https://', 1)
-            code = 301
-            return redirect(url, code=code)
     # POST /authenticate
     """
     Sample

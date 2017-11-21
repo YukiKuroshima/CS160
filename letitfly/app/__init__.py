@@ -1,7 +1,7 @@
 from flask_api import FlaskAPI, status
 from flask_sqlalchemy import SQLAlchemy
 from flask import Blueprint, render_template, abort, request, make_response, jsonify, redirect, session, url_for # Blueprints
-import datetime
+from datetime import datetime
 
 from app.models.database import db
 from app.models.users_model import User
@@ -133,8 +133,8 @@ def create_app(config_name):
                         driver=driver,
                         username=username,
                         password=password,
-                        date_created=str(datetime.datetime.now()),
-                        date_modified=str(datetime.datetime.now())
+                        date_created=str(datetime.now()),
+                        date_modified=str(datetime.now())
                         )
 
                 temp_user.save()
@@ -401,6 +401,14 @@ def create_app(config_name):
             user = User.query.filter_by(email=session['email']).first()
             rides = Rides.query.filter_by(customer_id=user.user_id).all()
             return render_template('table.html', rides=rides)
+        else:
+            return redirect('auth')
+
+    @app.route("/user", methods=['GET'])
+    def user_profile():
+        if 'email' in session:
+            user = User.query.filter_by(email=session['email']).first()
+            return render_template('user.html', user=user)
         else:
             return redirect('auth')
 

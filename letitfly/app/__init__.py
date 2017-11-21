@@ -136,7 +136,7 @@ def create_app(config_name):
                 '''
         else:
             content = {'err': 'All fields must be filled out and email must be unique.'}
-            return render_template('register.html')
+            return render_template('dashboard.html')
 
 
     @app.route("/logout", methods=['POST', 'GET'])

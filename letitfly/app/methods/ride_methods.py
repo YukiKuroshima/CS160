@@ -1,5 +1,5 @@
 from datetime import datetime
-from app.models.users_model import Ride
+from app.models.users_model import Rides
 
 """
 Find all imcomplted (Not picked up yet) ride requests and

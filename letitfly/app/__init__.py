@@ -1,17 +1,9 @@
-#<<<<<<< Dev_user_wait
 from flask_api import FlaskAPI, status
 from flask_sqlalchemy import SQLAlchemy
 from app.models.database import db
 from app.models.users_model import User
 from app.models.drives_model import Rides
 from flask import Blueprint, render_template, abort, request, make_response, jsonify, redirect, session, url_for # Blueprints
-
-# For route
-from sqlalchemy import exc
-#=======
-from flask import request
-from flask_api import FlaskAPI
-#>>>>>>> master
 
 from app.models.database import db
 from app.routes.user_routes import authenticate, register

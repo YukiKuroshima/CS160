@@ -1,14 +1,9 @@
 from app.models.database import db
-#<<<<<<< Dev_user_wait
-from app import db
 from flask import current_app
 import jwt
 from app.models.drives_model import Rides
 from datetime import datetime, timedelta
 from werkzeug.security import safe_str_cmp
-#=======
-#>>>>>>> master
-
 
 class User(db.Model):
     """This class represents the customers and drivers table"""
@@ -76,7 +71,6 @@ class User(db.Model):
         """
         return self.driver
 
-#<<<<<<< Dev_user_wait
     def has_incompleted_ride(self):
         """
         Check if the user has incompleted ride
@@ -122,15 +116,3 @@ class User(db.Model):
         except Exception as e:
             # return an error in string format if an exception occurs
             return str(e)
-#=======
-#>>>>>>> master
-
-def find_user_by_user_id(user_id):
-    """Find one user by user_id (Primary Key)"""
-    try:
-        return User.query.filter_by(
-                user_id=user_id
-                ).first()
-    except Exception as e:
-        # return an error in string format if an exception occurs
-        return str(e)

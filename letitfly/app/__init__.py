@@ -123,7 +123,7 @@ def create_app(config_name):
                 return redirect('request')
             except Exception as e:
                 response = {'err': 'All fields must be filled out and email must be unique. %s' % e}
-                return response, HTTP_400_BAD_REQUEST
+                return response, status.HTTP_400_BAD_REQUEST
                 # return render_template('login.html', content=content)
             '''
             except exc.OperationalError as e:

@@ -64,7 +64,7 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay, currentP
       // document.getElementById("duration").value = response.routes.
       var resultText = "Duration: " + response.routes[0].legs[0].duration.text +
         "<br>Distance: " + response.routes[0].legs[0].distance.text +
-        "<br>$ " + meterToMile(calculatePrice(response.routes[0].legs[0].distance.value));
+        "<br>$ " + calculatePrice(meterToMile(response.routes[0].legs[0].distance.value));
       document.getElementById("duration").innerHTML = resultText;
 
       var reqButtonText = '<input id="request" type="button" value="Request a ride" />';

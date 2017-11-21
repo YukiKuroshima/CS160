@@ -1,6 +1,6 @@
-# [Light Bootstrap Dashboard](http://www.creative-tim.com/product/light-bootstrap-dashboard)
+# [Light Bootstrap Dashboard](https://www.creative-tim.com/product/light-bootstrap-dashboard)
 
-![alt text](http://s3.amazonaws.com/creativetim_bucket/products/32/original/opt_lbd_thumbnail.jpg "Light Bootstrap Dashboard")
+![alt text](https://s3.amazonaws.com/creativetim_bucket/products/32/original/opt_lbd_thumbnail.jpg "Light Bootstrap Dashboard")
 
 Light Bootstrap Dashboard is an admin dashboard template designed to be beautiful and simple. It is built on top of Bootstrap 3 and it is fully responsive. It comes with a big collections of elements that will offer you multiple possibilities to create the app that best fits your needs. It can be used to create admin panels, project management systems, web applications backend, CMS or CRM.
 
@@ -15,16 +15,16 @@ We are very excited to share this dashboard with you and we look forward to hear
 
 ## Links:
 
-+ [Live Preview](http://demos.creative-tim.com/light-bootstrap-dashboard)
++ [Live Preview](https://demos.creative-tim.com/light-bootstrap-dashboard)
 + [Video Tutorial](https://www.youtube.com/watch?v=c3M3NQtFyqM)
-+ [Light Bootstrap Dashboard PRO](http://www.creative-tim.com/product/light-bootstrap-dashboard-pro) (from $39)
++ [Light Bootstrap Dashboard PRO](https://www.creative-tim.com/product/light-bootstrap-dashboard-pro) (from $39)
 
 ## Quick start
 
 Quick start options:
 
 - [Download from Github](https://github.com/creativetimofficial/light-bootstrap-dashboard.git).
-- [Download from Creative Tim](http://www.creative-tim.com/product/light-bootstrap-dashboard).
+- [Download from Creative Tim](https://www.creative-tim.com/product/light-bootstrap-dashboard).
 - Clone the repo: `git clone https://github.com/creativetimofficial/light-bootstrap-dashboard.git`.
 
 
@@ -92,18 +92,18 @@ V1.3.1 - 19 January 2017 [current version]
 
 ### License
 
-- Copyright 2017 Creative Tim (http://www.creative-tim.com)
+- Copyright 2017 Creative Tim (https://www.creative-tim.com)
 - Licensed under MIT (https://github.com/creativetimofficial/light-bootstrap-dashboard/blob/master/LICENSE.md)
 
 ## Useful Links
 
-More products from Creative Tim: <http://www.creative-tim.com/products>
+More products from Creative Tim: <https://www.creative-tim.com/products>
 
 Tutorials: <https://www.youtube.com/channel/UCVyTG4sCw-rOvB9oHkzZD1w>
 
-Freebies: <http://www.creative-tim.com/products>
+Freebies: <https://www.creative-tim.com/products>
 
-Affiliate Program (earn money): <http://www.creative-tim.com/affiliates/new>
+Affiliate Program (earn money): <https://www.creative-tim.com/affiliates/new>
 
 Social Media:
 

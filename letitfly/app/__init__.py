@@ -47,7 +47,6 @@ def create_app(config_name):
     }
     """
     @app.route('/auth', methods=['POST', 'GET'])
-#<<<<<<< Dev_user_wait
     def authenticate():
         session.clear()
         if request.method == 'POST':
@@ -91,10 +90,6 @@ def create_app(config_name):
                 return make_response(jsonify(response)), 500
         else:
             return render_template('login.html')
-#=======
-    def auth():
-        return authenticate(request)
-#>>>>>>> master
 
     # POST /register
     """
@@ -110,7 +105,6 @@ def create_app(config_name):
     }
     """
     @app.route('/register', methods=['POST', 'GET'])
-#<<<<<<< Dev_user_wait
     def register():
         session.clear()
         if request.method == 'POST':
@@ -188,7 +182,7 @@ def create_app(config_name):
                 return response, status.HTTP_201_CREATED
             else:
                 print('Render maps.html')
-                return render_template('register.html', requestingFlag=True)
+                return render_template('maps.html', requestingFlag=True)
 
     @app.route("/waiting", methods=['GET'])
     def waiting():
@@ -249,15 +243,6 @@ def create_app(config_name):
         else:
             print('Render maps.html')
             return render_template('maps.html', requestingFlag=True)
-#=======
-    def reg():
-        return register(request)
-
-    @app.route("/request", methods=['POST', 'GET'])
-    def req_ride():
-        return request_ride(request)
-
-#>>>>>>> master
 
     """
     GET /search
@@ -265,7 +250,6 @@ def create_app(config_name):
     Only driver can access this API
     Return JSON: List of imcompleted ride requests
     """
-#<<<<<<< Dev_user_wait
     @app.route("/search", methods=['GET', 'POST'])
     def seach_ride():
         # Access token found
@@ -373,15 +357,6 @@ def create_app(config_name):
             response = {'err': 'No access token found'}
             status_code = status.HTTP_400_BAD_REQUEST
             return response, status_code
-#=======
-    @app.route("/search", methods=['GET'])
-    def search_ride():
-        return search_for_ride(request)
-
-    @app.route("/history", methods=['GET'])
-    def get_history():
-        return get_drive_history(request)
-#>>>>>>> master
 
     @app.route("/drive", methods=['GET', 'POST'])
     def drive():

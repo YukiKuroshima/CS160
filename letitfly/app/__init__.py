@@ -121,6 +121,10 @@ def create_app(config_name):
 
                 session['email'] = request.form.get('email')
                 return redirect('request')
+            except Exception as e:
+                content = {'err': 'All fields must be filled out and email must be unique'}
+                return render_template('register.html', content=content)
+            '''
             except exc.OperationalError as e:
                 # SQLalchemy missing value
                 content = {'err': 'Missing value', 'info': 'Error: %s' % e}
@@ -129,6 +133,7 @@ def create_app(config_name):
                 # SQLalchemy insertion error (such as duplicate value)
                 content = {'err': 'Duplicate value', 'info': 'Error: %s' % e}
                 return render_template('register.html', content=content)
+                '''
         else:
             return render_template('register.html')
 
@@ -366,6 +371,13 @@ def create_app(config_name):
             response = {'err': 'No access token found'}
             status_code = status.HTTP_400_BAD_REQUEST
             return response, status_code
+
+    @app.route("/history", methods=['GET'])
+    def history():
+        if 'email' in session:
+            rides = Rides.query.filter_by(customer_id=session['customer_id']).all()
+        return render_template(
+            )
 
     @app.route("/payment", methods=['GET'])
     def payment():

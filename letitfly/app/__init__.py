@@ -122,7 +122,7 @@ def create_app(config_name):
                 session['email'] = request.form.get('email')
                 return redirect('auth')
             except Exception as e:
-                content = {'err': 'All fields must be filled out and email must be unique'}
+                content = {'err': 'All fields must be filled out and email must be unique. %s' % e}
                 # return render_template('register.html', content=content)
             '''
             except exc.OperationalError as e:

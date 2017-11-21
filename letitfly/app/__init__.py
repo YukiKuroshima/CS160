@@ -135,7 +135,7 @@ def create_app(config_name):
                 return render_template('register.html', content=content)
                 '''
         else:
-            content = {'err': 'All fields must be filled out and email must be unique. %s' % e}
+            content = {'err': 'All fields must be filled out and email must be unique.'}
             return render_template('register.html')
 
 

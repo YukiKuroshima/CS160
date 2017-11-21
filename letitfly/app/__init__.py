@@ -1,6 +1,7 @@
 from flask_api import FlaskAPI, status
 from flask_sqlalchemy import SQLAlchemy
 from flask import Blueprint, render_template, abort, request, make_response, jsonify, redirect, session, url_for # Blueprints
+import datetime
 
 from app.models.database import db
 from app.models.users_model import User
@@ -97,20 +98,45 @@ def create_app(config_name):
     """
     @app.route('/register', methods=['POST', 'GET'])
     def register():
+
         session.clear()
+        
         if request.method == 'POST':
+            first_name = request.form.get('firstname')
+            last_name = request.form.get('lastname')
+            credit_card = request.form.get('creditcard')
+            email = request.form.get('email')
+            driver = True if request.form.get('driver') else False
+            username = request.form.get('username')
+            password = request.form.get('password')
+
+            if len(first_name) > 50 or len(last_name) > 50 or len(username) > 20 or len(password) > 22:
+                response = {'err': 'First and last name cannot exceed 50 characters in length.'
+                'Username cannot exceed 20 characters. Password cannot exceed 22 characters.'}
+                return render_template('register.html', content=response)
+
+            if '@' not in email:
+                response = {'err': 'Invalid email'}
+                return render_template('register.html', content=response)
+
+            if len(credit_card) > 16 or len(credit_card) < 15 or not str(credit_card).isdigit():
+                response = {'err': 'Invalid credit card number'}
+                return render_template('register.html', content=response)
+
             try:
+
                 temp_user = User(
-                        first_name=request.form.get('firstname'),
-                        last_name=request.form.get('lastname'),
-                        credit_card=request.form.get('creditcard'),
-                        email=request.form.get('email'),
-                        driver=True if request.form.get('driver') else False,
-                        username=request.form.get('username'),
-                        password=request.form.get('password'),
-                        date_created='S',
-                        date_modified='S',
+                        first_name=first_name,
+                        last_name=last_name,
+                        credit_card=credit_card,
+                        email=email,
+                        driver=driver,
+                        username=username,
+                        password=password,
+                        date_created=str(datetime.datetime.now()),
+                        date_modified=str(datetime.datetime.now())
                         )
+
                 temp_user.save()
                 # access_token = temp_user.generate_token(temp_user.user_id)
 
@@ -132,7 +158,7 @@ def create_app(config_name):
                 '''
         else:
             content = {'err': 'All fields must be filled out and email must be unique.'}
-            return render_template('register.html')
+            return render_template('register.html', content=content)
 
 
     @app.route("/logout", methods=['POST', 'GET'])
@@ -395,7 +421,7 @@ def create_app(config_name):
     @app.route("/history", methods=['GET'])
     def history():
         if 'email' in session:
-            rides = Rides.query.filter_by(customer_id=session['customer_id']).all()
+            rides = Rides.query.filter_by(customer_id=session['user_id']).all()
             return render_template('table.html', content=rides)
         else:
             redirect('auth')

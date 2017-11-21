@@ -1,18 +1,15 @@
 from flask_api import FlaskAPI, status
 from flask_sqlalchemy import SQLAlchemy
-from app.models.database import db
-from app.models.users_model import User
-from app.models.drives_model import Rides
 from flask import Blueprint, render_template, abort, request, make_response, jsonify, redirect, session, url_for # Blueprints
 
 from app.models.database import db
+from app.models.users_model import User
+from app.models.drives_model import Rides
+from app.methods.user_methods import *
+from app.methods.ride_methods import *
 from app.routes.user_routes import authenticate, register
 from app.routes.ride_routes import request_ride, search_for_ride
 from instance.config import app_config
-
-# currently only being used by hello
-from app.models.users_model import User
-from app.models.drives_model import Rides
 
 
 def create_app(config_name):
@@ -58,10 +55,10 @@ def create_app(config_name):
                         ).first()
 
                 # Try to authenticate the found user using their password
-                if user and user.validate_password(request.form.get('password')):
+                if user and validate_password(user, request.form.get('password')):
                     # Generate the access token.
                     # This will be used as the authorization header
-                    access_token = user.generate_token(user.user_id)
+                    access_token = generate_token(user.user_id)
                     if access_token:
                         # redirect_to_index = redirect('/request')
                         # response = make_response(redirect_to_index)
@@ -378,8 +375,7 @@ def create_app(config_name):
     def history():
         if 'email' in session:
             rides = Rides.query.filter_by(customer_id=session['customer_id']).all()
-        return render_template(
-            )
+        #return render_template()
 
     @app.route("/payment", methods=['GET'])
     def payment():

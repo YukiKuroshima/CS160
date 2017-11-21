@@ -110,7 +110,7 @@ def create_app(config_name):
             username = request.form.get('username')
             password = request.form.get('password')
 
-            if len(first_name) > 50 or len(last_name) > 50 or len(username) > 20 or len(password) > 22:
+            if len(str(first_name)) > 50 or len(str(last_name)) > 50 or len(str(username)) > 20 or len(str(password)) > 22:
                 response = {'err': 'First and last name cannot exceed 50 characters in length.'
                 'Username cannot exceed 20 characters. Password cannot exceed 22 characters.'}
                 return render_template('register.html', content=response)
@@ -119,7 +119,7 @@ def create_app(config_name):
                 response = {'err': 'Invalid email'}
                 return render_template('register.html', content=response)
 
-            if len(credit_card) > 16 or len(credit_card) < 15 or not str(credit_card).isdigit():
+            if len(str(credit_card)) > 16 or len(str(credit_card)) < 15 or not str(credit_card).isdigit():
                 response = {'err': 'Invalid credit card number'}
                 return render_template('register.html', content=response)
 
@@ -423,7 +423,7 @@ def create_app(config_name):
         if 'email' in session:
             user = User.query.filter_by(email=session['email']).first()
             rides = Rides.query.filter_by(customer_id=user.user_id).all()
-            return render_template('table.html', rides=rides)
+            return render_template('table.html', rides=rides.tojson())
         else:
             redirect('auth')
 

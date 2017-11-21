@@ -170,6 +170,7 @@ def create_app(config_name):
     def request_ride():
         # access_token = parse_access_token(request)
         # Access token found
+        print('In /request')
         
         if 'email' in session:
             # user_id = User.decode_token(request.cookies.get(''))
@@ -197,6 +198,11 @@ def create_app(config_name):
             else:
                 print('Render maps.html')
                 return render_template('maps.html', requestingFlag=True)
+        else:
+            print('Sessiong not found')
+            return redirect('auth')
+
+
 
     @app.route("/waiting", methods=['GET'])
     def waiting():

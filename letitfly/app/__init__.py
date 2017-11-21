@@ -188,7 +188,7 @@ def create_app(config_name):
                 return response, status.HTTP_201_CREATED
             else:
                 print('Render maps.html')
-                return render_template('maps.html', requestingFlag=True)
+                return render_template('register.html', requestingFlag=True)
 
     @app.route("/waiting", methods=['GET'])
     def waiting():

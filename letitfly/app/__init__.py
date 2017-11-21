@@ -263,7 +263,7 @@ def create_app(config_name):
 
                 # Redirect to pick up page (Shows the route to the user)
                 # MUST use js to refirect
-                response = {'info': 'Ride appcepted'}
+                response = {'info': 'Ride accepted'}
                 return response, status.HTTP_200_OK
 
             # If GET
@@ -375,7 +375,7 @@ def create_app(config_name):
     def history():
         if 'email' in session:
             rides = Rides.query.filter_by(customer_id=session['customer_id']).all()
-        #return render_template()
+        return render_template('table.html')
 
     @app.route("/payment", methods=['GET'])
     def payment():

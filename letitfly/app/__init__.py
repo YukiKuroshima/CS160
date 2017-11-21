@@ -123,7 +123,7 @@ def create_app(config_name):
                 return redirect('request')
             except Exception as e:
                 content = {'err': 'All fields must be filled out and email must be unique. %s' % e}
-                return render_template('auth.html', content=content)
+                return render_template('login.html', content=content)
             '''
             except exc.OperationalError as e:
                 # SQLalchemy missing value

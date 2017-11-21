@@ -3,14 +3,8 @@ function meterToMile(meter) {
 }
 
 function calculatePrice (mile) {
-  var chargedMile = mile - 2;
-  var price = chargedMile * 10;
-
-  if (price < 15) {
-    return 15;
-  } else {
-    return price;
-  }
+  var price = 5.00 + (mile * 1.80);
+  return price;
 }
 
 function mapAirportCode(code) {

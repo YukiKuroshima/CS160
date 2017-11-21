@@ -78,6 +78,20 @@
                 <div class="collapse navbar-collapse">
 
 
+                <ul class="nav navbar-nav navbar-left">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown">
+                            <p>Click to select an Airport </p>
+                        </a>
+                    <ul id="end" class="dropdown-menu">
+                        <li value="SFO"><a>SFO</a></option>
+                        <li value="OAK"><a>OAK</a></option>
+                        <li value="SJC"><a>SJC</a></option>
+                    </ul>
+                    <div id="duration"></div>
+                    <div id="reqbutton"></div>
+                </ul>
+
                     <ul class="nav navbar-nav navbar-right">
                         <li class="dropdown">
                               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -107,32 +121,6 @@
             </div>
         </nav>
 
-        <div id="floating-panel">
-            <div>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <p>
-                        Select an Airport
-                        <b class="caret"></b>
-                        </p>
-                    </a>
-                    <ul id="end2" class="dropdown-menu">
-                        <li><a id="SFO">SFO</a></li>
-                        <li><a id="OAK">OAK</a></li>
-                        <li><a id="SJC">SJC</a></li>
-                    </ul>
-                </li>
-                <b>End: </b>
-                <select id="end">
-                    <option value="SFO">SFO</option>
-                    <option value="OAK">OAK</option>
-                    <option value="SJC">SJC</option>
-                </select>
-                <div id="duration"></div>
-            </div>
-            <div id="reqbutton"></div>
-        </div>
-        <div id="map"></div>
 
     </div>
 </div>

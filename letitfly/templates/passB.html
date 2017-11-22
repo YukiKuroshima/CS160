@@ -95,36 +95,6 @@
           zoom: 6,
           center: new google.maps.LatLng(37.3352, -121.8811)
         });
-
-        // var sharks = {lat: 37.332, lng: -121.901};
-        // var SAP = new google.maps.Marker({
-        //   position: sharks,
-        //   map: map
-        // });
-
-        // var santa = {lat: 37.354, lng: -121.955};
-        // var scu = new google.maps.Marker({
-        //   position: santa,
-        //   map: map
-        // });
-
-        // var his = {lat: 37.414, lng: -122.077};
-        // var comp = new google.maps.Marker({
-        //   position: his,
-        //   map: map
-        // });
-        
-        // var martin = {lat: 37.335, lng: -121.885};
-        // var mlk = new google.maps.Marker({
-        //   position: martin,
-        //   map: map
-        // });
-
-        // var cent = {lat: 37.335, lng: -121.893};
-        // var civic = new google.maps.Marker({
-        //   position: martin,
-        //   map: map
-        // });
       
         directionsDisplay.setMap(map);
 
@@ -135,10 +105,23 @@
 
       function calculateAndDisplayRoute(directionsService, directionsDisplay) 
       {
+        // var geo = new google.maps.Geocoder();
+        // var startAdd = document.getElementById('start').value;
+        // var latitude, longitude;
+        // geo.geocode({'address': startAdd}, function(response, status) {
+        //   if (status === 'OK') {
+        //     latitude = response[0].geometry.location.lat();
+        //     longitude = response[0].geometry.location.lng();
+        //   }
+        // });
+        // console.log(latitude);
+        // console.log(longitude);
+
         var pointA;
         var pointB;
         var st = document.getElementById('start').value;
         var way = document.getElementById('waypoints').value;
+        console.log(st);
         // do start values first 
         if (st === "San Jose State University, CA") {
           pointA = new google.maps.LatLng(37.3352, -121.8811);
@@ -170,7 +153,6 @@
         if (abDist <= 1609) 
         { // if Point a and Point B are within 1 mile
           // go to Point B
-          // add waypoint functionality
           var waypts = [];
           var checkboxArray = document.getElementById('waypoints');
           for (var i = 0; i < checkboxArray.length; i++) {
@@ -182,10 +164,10 @@
             }
           }
           directionsService.route({
-            origin: document.getElementById('start').value, // think this gives a string?
+            origin: document.getElementById('start').value, 
             destination: document.getElementById('end').value,
-            waypoints: waypts, // THESE TWO ADD IN THE WAYPOINTN FUNCTIONALITY
-            optimizeWaypoints: true, // ADD IN WAYPOINT FUNCTIONALITY
+            waypoints: waypts, 
+            optimizeWaypoints: true, 
             travelMode: 'DRIVING'
           }, function(response, status) {
             if (status === 'OK') {
@@ -200,7 +182,8 @@
                     '</b><br>';
                 summaryPanel.innerHTML += route.legs[i].start_address + ' to ';
                 summaryPanel.innerHTML += route.legs[i].end_address + '<br>';
-                summaryPanel.innerHTML += route.legs[i].distance.text + '<br><br>';
+                summaryPanel.innerHTML += route.legs[i].distance.text + '<br>';
+                summaryPanel.innerHTML += route.legs[i].duration.text + '<br><br>';
               }
             } else 
             {
@@ -214,7 +197,7 @@
         { // if not within 1 mile do 
           // will only do the origin to destination 
           directionsService.route({
-            origin: document.getElementById('start').value, // think this gives a string?
+            origin: document.getElementById('start').value,
             destination: document.getElementById('end').value,
             // waypoints: waypts, // THESE TWO ADD IN THE WAYPOINTFUNCTIONALITY
             // optimizeWaypoints: true, // ADD IN WAYPOINT FUNCTIONALITY
@@ -233,7 +216,8 @@
                     '</b><br>';
                 summaryPanel.innerHTML += route.legs[i].start_address + ' to ';
                 summaryPanel.innerHTML += route.legs[i].end_address + '<br>';
-                summaryPanel.innerHTML += route.legs[i].distance.text + '<br><br>';
+                summaryPanel.innerHTML += route.legs[i].distance.text + '<br>';
+                summaryPanel.innerHTML += route.legs[i].duration.text + '<br><br>';
               }
             } else {
               window.alert('Directions request failed due to ' + status);

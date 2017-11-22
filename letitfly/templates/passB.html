@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>POST</title>
+    <style>
+      #right-panel {
+        font-family: 'Roboto','sans-serif';
+        line-height: 30px;
+        padding-left: 10px;
+      }
+      #right-panel select, #right-panel input {
+        font-size: 15px;
+      }
+      #right-panel select {
+        width: 100%;
+      }
+      #right-panel i {
+        font-size: 12px;
+      }
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 100%;
+        float: left;
+        width: 70%;
+        height: 100%;
+      }
+      #right-panel {
+        margin: 20px;
+        border-width: 2px;
+        width: 20%;
+        height: 400px;
+        float: left;
+        text-align: left;
+        padding-top: 0;
+      }
+      #directions-panel {
+        margin-top: 10px;
+        background-color: #FFEE77;
+        padding: 10px;
+        overflow: scroll;
+        height: 174px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <div id="right-panel">
+    <div>
+    <b>Start:</b>
+    <select id="start">
+       <option value="San Jose State University, CA">San Jose State University, CA</option>
+      <option value = "University of San Francisco, CA">University of San Francisco, CA</option>
+      <option value = "Santana Row, CA">Santana Row, CA</option>
+
+    </select>
+    <br>
+    <b>Passenger B</b> <br>
+    <i></i> <br>
+    <select multiple id="waypoints">
+      <option value="Santa Clara University, CA">Santa Clara University, CA</option>
+      <option value="City National Civic, CA">City National Civic, CA</option>
+      <option value="SAP Center, CA">SAP Center, CA</option>
+      <option value="Martin Luther King Library, CA">Martin Luther King Library, CA</option>
+    </select>
+    
+    <br>
+    <b>End:</b>
+    <select id="end">
+       <option value="San Jose Airport, CA">San Jose Airport, CA</option>
+      <option value="San Francisco Airport, CA">San Francisco Airport, CA</option>
+      <option value="Los Angeles Airport, CA">Los Angeles Airport, CA</option>
+    </select>
+    <br>
+      <input type="submit" id="submit">
+    </div>
+    <div id="directions-panel"></div>
+    </div>
+
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAck9gozAKmXvYT3KXbkvYqV8mU9Vs7Qdk&libraries=geometry"></script>
+
+    <script>
+      function initMap() {
+        var directionsService = new google.maps.DirectionsService;
+        var directionsDisplay = new google.maps.DirectionsRenderer;
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 6,
+          center: new google.maps.LatLng(37.3352, -121.8811)
+        });
+      
+        directionsDisplay.setMap(map);
+        document.getElementById('submit').addEventListener('click', function() {
+          calculateAndDisplayRoute(directionsService, directionsDisplay);
+        });
+      }
+      function calculateAndDisplayRoute(directionsService, directionsDisplay) 
+      {
+        // var geo = new google.maps.Geocoder();
+        // var startAdd = document.getElementById('start').value;
+        // var latitude, longitude;
+        // geo.geocode({'address': startAdd}, function(response, status) {
+        //   if (status === 'OK') {
+        //     latitude = response[0].geometry.location.lat();
+        //     longitude = response[0].geometry.location.lng();
+        //   }
+        // });
+        // console.log(latitude);
+        // console.log(longitude);
+        var pointA;
+        var pointB;
+        var st = document.getElementById('start').value;
+        var way = document.getElementById('waypoints').value;
+        console.log(st);
+        // do start values first 
+        if (st === "San Jose State University, CA") {
+          pointA = new google.maps.LatLng(37.3352, -121.8811);
+        }
+        else if (st === "University of San Francisco, CA") {
+          pointA = new google.maps.LatLng(37.7739, -121.4312);
+          
+        }
+        else if (st === "Santana Row, CA") {
+          pointA = new google.maps.LatLng(37.3222, -121.9479);
+        }
+        // waypoints
+        if (way === "Santa Clara University, CA") {
+          pointB = new google.maps.LatLng(37.354, -121.955);
+        }
+        else if (way === "City National Civic, CA") {
+          pointB = new google.maps.LatLng(37.335, -121.893);
+        }
+        else if (way === "SAP Center, CA") {
+          pointB = new google.maps.LatLng(37.332, -121.901);
+        }
+        else if (way === "Martin Luther King Library, CA") {
+          pointB = new google.maps.LatLng(37.335, -121.885);
+        }
+       var abDist = google.maps.geometry.spherical.computeDistanceBetween(pointA, pointB);
+        if (abDist <= 1609) 
+        { // if Point a and Point B are within 1 mile
+          // go to Point B
+          var waypts = [];
+          var checkboxArray = document.getElementById('waypoints');
+          for (var i = 0; i < checkboxArray.length; i++) {
+            if (checkboxArray.options[i].selected) {
+              waypts.push({
+                location: checkboxArray[i].value,
+                stopover: true
+              });
+            }
+          }
+          directionsService.route({
+            origin: document.getElementById('start').value, 
+            destination: document.getElementById('end').value,
+            waypoints: waypts, 
+            optimizeWaypoints: true, 
+            travelMode: 'DRIVING'
+          }, function(response, status) {
+            if (status === 'OK') {
+              directionsDisplay.setDirections(response);
+              var route = response.routes[0];
+              var summaryPanel = document.getElementById('directions-panel');
+              summaryPanel.innerHTML = '';
+              // For each route, display summary information.
+              for (var i = 0; i < route.legs.length; i++) {
+                var routeSegment = i + 1;
+                summaryPanel.innerHTML += '<b>Route Segment: ' + routeSegment +
+                    '</b><br>';
+                summaryPanel.innerHTML += route.legs[i].start_address + ' to ';
+                summaryPanel.innerHTML += route.legs[i].end_address + '<br>';
+                summaryPanel.innerHTML += route.legs[i].distance.text + '<br>';
+                summaryPanel.innerHTML += route.legs[i].duration.text + '<br><br>';
+              }
+            } else 
+            {
+              window.alert('Directions request failed due to ' + status);
+            }
+          });
+        }
+        else 
+        { // if not within 1 mile do 
+          // will only do the origin to destination 
+          directionsService.route({
+            origin: document.getElementById('start').value,
+            destination: document.getElementById('end').value,
+            // waypoints: waypts, // THESE TWO ADD IN THE WAYPOINTFUNCTIONALITY
+            // optimizeWaypoints: true, // ADD IN WAYPOINT FUNCTIONALITY
+            travelMode: 'DRIVING'
+          }, function(response, status) {
+            if (status === 'OK') {
+              directionsDisplay.setDirections(response);
+              var route = response.routes[0];
+              console.log('Routes' + response);
+              var summaryPanel = document.getElementById('directions-panel');
+              summaryPanel.innerHTML = '';
+              // For each route, display summary information.
+              for (var i = 0; i < route.legs.length; i++) {
+                var routeSegment = i + 1;
+                summaryPanel.innerHTML += '<b>Route Segment: ' + routeSegment +
+                    '</b><br>';
+                summaryPanel.innerHTML += route.legs[i].start_address + ' to ';
+                summaryPanel.innerHTML += route.legs[i].end_address + '<br>';
+                summaryPanel.innerHTML += route.legs[i].distance.text + '<br>';
+                summaryPanel.innerHTML += route.legs[i].duration.text + '<br><br>';
+              }
+            } else {
+              window.alert('Directions request failed due to ' + status);
+            }
+          });
+        }
+    
+      }
+    </script>
+
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAck9gozAKmXvYT3KXbkvYqV8mU9Vs7Qdk&callback=initMap">
+    </script>
+  </body>
+</html>

@@ -1,4 +1,3 @@
-
 from flask import Flask, render_template
 from flask_googlemaps import GoogleMaps
 from flask_googlemaps import Map, icons
@@ -54,9 +53,9 @@ def fullmap():
             }
         ],
     )
-    return render_template('directory.html', fullmap=fullmap)
+    return render_template('passB.html', fullmap=fullmap)
 
 
 if __name__ == "__main__":
-    #webbrowser.open('https://127.0.0.1:5000')
+    #webbrowser.open('http://127.0.0.1:5000')
     app.run(debug=True, use_reloader=True)

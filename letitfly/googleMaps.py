@@ -54,7 +54,7 @@ def fullmap():
             }
         ],
     )
-    return render_template('passB orig.html', fullmap=fullmap)
+    return render_template('passB.html', fullmap=fullmap)
 
 
 if __name__ == "__main__":

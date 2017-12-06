@@ -5,6 +5,7 @@ from app.models.drives_model import Rides
 from datetime import datetime, timedelta
 from werkzeug.security import safe_str_cmp
 
+
 class User(db.Model):
     """This class represents the customers and drivers table"""
 
@@ -13,7 +14,7 @@ class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
-    credit_card = db.Column(db.Integer, nullable=False)
+    credit_card = db.Column(db.String(20), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
     driver = db.Column(db.Boolean)
     password = db.Column(db.String(25), nullable=False)

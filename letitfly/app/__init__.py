@@ -1,5 +1,6 @@
 from flask_api import FlaskAPI, status
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import exc
 from flask import Blueprint, render_template, abort, request, make_response, jsonify, redirect, session, url_for # Blueprints
 from datetime import datetime
 
@@ -8,6 +9,7 @@ from app.models.users_model import User
 from app.models.drives_model import Rides
 from app.methods.user_methods import *
 from app.methods.ride_methods import *
+from app.methods.authentication_methods import validate_password
 from instance.config import app_config
 
 
@@ -58,14 +60,12 @@ def create_app(config_name):
                 if user and validate_password(user, request.form.get('password')):
                     # Generate the access token.
                     # This will be used as the authorization header
-                    access_token = generate_token(user.user_id)
-                    if access_token:
-                        if user.is_driver:
-                            session['email'] = request.form.get('email')
-                            return redirect('search')
-                        else:
-                            session['email'] = request.form.get('email')
-                        return redirect('request')
+                    if user.is_driver:
+                        session['email'] = request.form.get('email')
+                        return redirect('search')
+                    else:
+                        session['email'] = request.form.get('email')
+                    return redirect('request')
 
                 else:
                     # User does not exist. Therefore, we return an error message
@@ -125,7 +125,6 @@ def create_app(config_name):
                 return render_template('register.html', content=response)
 
             try:
-
                 temp_user = User(
                         first_name=first_name,
                         last_name=last_name,
@@ -143,23 +142,11 @@ def create_app(config_name):
 
                 session['email'] = request.form.get('email')
                 return redirect('request')
-            except Exception as e:
-                response = {'err': 'All fields must be filled out and email must be unique. %s' % e}
-                return response, status.HTTP_400_BAD_REQUEST
-                # return render_template('login.html', content=content)
-            '''
-            except exc.OperationalError as e:
-                # SQLalchemy missing value
-                content = {'err': 'Missing value', 'info': 'Error: %s' % e}
-                return render_template('register.html', content=content)
             except exc.IntegrityError as e:
-                # SQLalchemy insertion error (such as duplicate value)
-                content = {'err': 'Duplicate value', 'info': 'Error: %s' % e}
+                content = {'err': 'Your email is already taken'}
                 return render_template('register.html', content=content)
-                '''
         else:
-            content = {'err': 'All fields must be filled out and email must be unique.'}
-            return render_template('register.html', content=content)
+            return render_template('register.html')
 
 
     @app.route("/logout", methods=['POST', 'GET'])

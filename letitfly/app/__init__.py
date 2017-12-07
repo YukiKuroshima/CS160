@@ -307,9 +307,7 @@ def create_app(config_name):
                     return redirect('request')
 
         else:
-            response = {'err': 'No access token found'}
-            status_code = status.HTTP_400_BAD_REQUEST
-            return response, status_code
+            return redirect('auth')
 
     @app.route("/pickup", methods=['GET', 'POST'])
     def pickup():
@@ -349,9 +347,8 @@ def create_app(config_name):
                         )
 
         else:
-            response = {'err': 'No access token found'}
-            status_code = status.HTTP_400_BAD_REQUEST
-            return response, status_code
+            return redirect('auth')
+
 
     @app.route("/drive", methods=['GET', 'POST'])
     def drive():
@@ -386,9 +383,7 @@ def create_app(config_name):
                         )
 
         else:
-            response = {'err': 'No access token found'}
-            status_code = status.HTTP_400_BAD_REQUEST
-            return response, status_code
+            redirect('auth')
 
     @app.route("/history", methods=['GET'])
     def history():
@@ -424,8 +419,6 @@ def create_app(config_name):
                     )
 
         else:
-            response = {'err': 'No access token found'}
-            status_code = status.HTTP_400_BAD_REQUEST
-            return response, status_code
+            redirect('auth')
 
     return app

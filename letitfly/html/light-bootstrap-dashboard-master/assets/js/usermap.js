@@ -3,14 +3,8 @@ function meterToMile(meter) {
 }
 
 function calculatePrice (mile) {
-  var chargedMile = mile - 2;
-  var price = chargedMile * 10;
-
-  if (price < 15) {
-    return 15;
-  } else {
-    return price;
-  }
+  var price = 5.00 + (mile * 1.80);
+  return Math.ceil(price * 100) / 100;
 }
 
 function mapAirportCode(code) {
@@ -70,7 +64,7 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay, currentP
       // document.getElementById("duration").value = response.routes.
       var resultText = "Duration: " + response.routes[0].legs[0].duration.text +
         "<br>Distance: " + response.routes[0].legs[0].distance.text +
-        "<br>$ " + meterToMile(calculatePrice(response.routes[0].legs[0].distance.value));
+        "<br>$ " + calculatePrice(meterToMile(response.routes[0].legs[0].distance.value));
       document.getElementById("duration").innerHTML = resultText;
 
       var reqButtonText = '<input id="request" type="button" value="Request a ride" />';

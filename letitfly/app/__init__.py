@@ -1,26 +1,16 @@
-#<<<<<<< Dev_user_wait
 from flask_api import FlaskAPI, status
 from flask_sqlalchemy import SQLAlchemy
-from app.models.database import db
-from app.models.users_model import User
-from app.models.drives_model import Rides
-from flask import Blueprint, render_template, abort, request, make_response, jsonify, redirect, session, url_for # Blueprints
-
-# For route
 from sqlalchemy import exc
-#=======
-from flask import request
-from flask_api import FlaskAPI
-#>>>>>>> master
+from flask import Blueprint, render_template, abort, request, make_response, jsonify, redirect, session, url_for # Blueprints
+from datetime import datetime
 
 from app.models.database import db
-from app.routes.user_routes import authenticate, register
-from app.routes.ride_routes import request_ride, search_for_ride
-from instance.config import app_config
-
-# currently only being used by hello
 from app.models.users_model import User
 from app.models.drives_model import Rides
+from app.methods.user_methods import *
+from app.methods.ride_methods import *
+from app.methods.authentication_methods import validate_password
+from instance.config import app_config
 
 
 def create_app(config_name):
@@ -54,14 +44,11 @@ def create_app(config_name):
         "password": "pass"
     }
     """
+    @app.route('/', methods=['POST', 'GET'])
     @app.route('/auth', methods=['POST', 'GET'])
-#<<<<<<< Dev_user_wait
     def authenticate():
         session.clear()
         if request.method == 'POST':
-            print('Post auth')
-            print('Email: ' + request.form.get('email'))
-            print('PW: ' + request.form.get('password'))
             try:
                 # Get the user object using their email (unique to every user)
 
@@ -70,18 +57,15 @@ def create_app(config_name):
                         ).first()
 
                 # Try to authenticate the found user using their password
-                if user and user.validate_password(request.form.get('password')):
-                    print('PW correct')
+                if user and validate_password(user, request.form.get('password')):
                     # Generate the access token.
                     # This will be used as the authorization header
-                    access_token = user.generate_token(user.user_id)
-                    if access_token:
-                        # redirect_to_index = redirect('/request')
-                        # response = make_response(redirect_to_index)
-                        # response.set_cookie('access_token', value=access_token.decode())
-                        # return response
+                    if user.is_driver:
                         session['email'] = request.form.get('email')
-                        return redirect('request')
+                        return redirect('search')
+                    else:
+                        session['email'] = request.form.get('email')
+                    return redirect('request')
 
                 else:
                     # User does not exist. Therefore, we return an error message
@@ -99,10 +83,6 @@ def create_app(config_name):
                 return make_response(jsonify(response)), 500
         else:
             return render_template('login.html')
-#=======
-    def auth():
-        return authenticate(request)
-#>>>>>>> master
 
     # POST /register
     """
@@ -118,43 +98,52 @@ def create_app(config_name):
     }
     """
     @app.route('/register', methods=['POST', 'GET'])
-#<<<<<<< Dev_user_wait
     def register():
+
         session.clear()
+        
         if request.method == 'POST':
+            first_name = request.form.get('firstname')
+            last_name = request.form.get('lastname')
+            credit_card = request.form.get('creditcard')
+            email = request.form.get('email')
+            driver = True if request.form.get('driver') else False
+            username = request.form.get('username')
+            password = request.form.get('password')
+
+            if len(str(first_name)) > 50 or len(str(last_name)) > 50 or len(str(username)) > 20 or len(str(password)) > 22:
+                response = {'err': 'First and last name cannot exceed 50 characters in length.'
+                'Username cannot exceed 20 characters. Password cannot exceed 22 characters.'}
+                return render_template('register.html', content=response)
+
+            if '@' not in email:
+                response = {'err': 'Invalid email'}
+                return render_template('register.html', content=response)
+
+            if len(str(credit_card)) > 16 or len(str(credit_card)) < 15 or not str(credit_card).isdigit():
+                response = {'err': 'Invalid credit card number'}
+                return render_template('register.html', content=response)
+
             try:
-                print('POST register')
-                print('firstname: ' + request.form.get('firstname'))
-                print('lastname: ' + request.form.get('lastname'))
-                print('cc: ' + request.form.get('creditcard'))
-                print('email: ' + request.form.get('email'))
-                print('driver: ' + str(True if request.form.get('driver') else False))
-                print('pw: ' + request.form.get('password'))
                 temp_user = User(
-                        first_name=request.form.get('firstname'),
-                        last_name=request.form.get('lastname'),
-                        credit_card=request.form.get('creditcard'),
-                        email=request.form.get('email'),
-                        driver=True if request.form.get('driver') else False,
-                        username=request.form.get('username'),
-                        password=request.form.get('password'),
-                        date_created='S',
-                        date_modified='S',
+                        first_name=first_name,
+                        last_name=last_name,
+                        credit_card=credit_card,
+                        email=email,
+                        driver=driver,
+                        username=username,
+                        password=password,
+                        date_created=str(datetime.now()),
+                        date_modified=str(datetime.now())
                         )
+
                 temp_user.save()
                 # access_token = temp_user.generate_token(temp_user.user_id)
 
                 session['email'] = request.form.get('email')
                 return redirect('request')
-            except exc.OperationalError as e:
-                # SQLalchemy missing value
-                content = {'err': 'Missing value', 'info': 'Error: %s' % e}
-                print(content)
-                return render_template('register.html', content=content)
             except exc.IntegrityError as e:
-                # SQLalchemy insertion error (such as duplicate value)
-                content = {'err': 'Duplicate value', 'info': 'Error: %s' % e}
-                print(content)
+                content = {'err': 'Your email is already taken'}
                 return render_template('register.html', content=content)
         else:
             return render_template('register.html')
@@ -175,7 +164,6 @@ def create_app(config_name):
             # user_id = User.decode_token(request.cookies.get(''))
             # user_id = User.decode_token(access_token)
             # Token is valid
-            print('Logged in as: ' + session['email'])
             if request.method == 'POST':
                 # Decode access token and get user_id that
                 # belongs to the user who requested the ride
@@ -195,16 +183,15 @@ def create_app(config_name):
                         }
                 return response, status.HTTP_201_CREATED
             else:
-                print('Render maps.html')
                 return render_template('maps.html', requestingFlag=True)
+        else:
+            return render_template('register.html', requestingFlag=True)
 
     @app.route("/waiting", methods=['GET'])
     def waiting():
         # Access token found
         if 'email' in session:
             # Token is valid
-            print('Looking for driver')
-            print('Logged in as: ' + session['email'])
             # Find client
             user = User.query.filter_by(
                     email=session['email']
@@ -214,7 +201,6 @@ def create_app(config_name):
                     customer_id=user.user_id,
                     time_finished=None
                     ).first()
-            print(ride.tojson())
 
             # If the ride.driver is null and
             # not picked up
@@ -243,7 +229,6 @@ def create_app(config_name):
                 # Show rider is picked up
                 # TODO if driver id is NOT null and picked up = True and finished_date is NOT null
                 # Show the rider amount they paid
-                print('Driver found')
                 return render_template(
                         'waitmap.html',
                         driverFoundFlag=True,
@@ -255,17 +240,7 @@ def create_app(config_name):
         # Token is invalid
         # Access token NOT found
         else:
-            print('Render maps.html')
             return render_template('maps.html', requestingFlag=True)
-#=======
-    def reg():
-        return register(request)
-
-    @app.route("/request", methods=['POST', 'GET'])
-    def req_ride():
-        return request_ride(request)
-
-#>>>>>>> master
 
     """
     GET /search
@@ -273,17 +248,12 @@ def create_app(config_name):
     Only driver can access this API
     Return JSON: List of imcompleted ride requests
     """
-#<<<<<<< Dev_user_wait
     @app.route("/search", methods=['GET', 'POST'])
     def seach_ride():
         # Access token found
         if 'email' in session:
             # If POST: Called when driver chooses a ride
             if request.method == 'POST':
-                print(request.data['id'])
-                print(request.data['lat'])
-                print(request.data['lng'])
-                print(type(request.data['lat']))
 
                 # request should contain driver's current location
                 # and ride_id
@@ -291,7 +261,6 @@ def create_app(config_name):
                 ride = Rides.query.filter_by(
                         ride_id=request.data['id']
                         ).first()
-                print(ride)
                 # Assign the driver to the ride
                 user = User.query.filter_by(
                         email=session['email']
@@ -320,7 +289,6 @@ def create_app(config_name):
                 if user.is_driver():
                     # If driver
                     # get all none picked up user data
-                    print('Rides')
                     rides = Rides.find_all_no_driver_assigned_rides_in_json()
                     # render html with ride_id and user locations
                     return render_template(
@@ -342,7 +310,6 @@ def create_app(config_name):
         if 'email' in session:
             # If POST: Called when driver chooses a ride
             if request.method == 'POST':
-                print(request.data)
                 # Picked up
                 # Driver can pick up a rider only if
                 # Distance between driver and rider is less than 1 mile
@@ -368,9 +335,6 @@ def create_app(config_name):
                         ride_id=session['ride_id']
                         ).first()
 
-                print('GET /pickup Ride info')
-                print(ride.tojson())
-
                 return render_template(
                         'drivermap.html',
                         pickupFlag=True,
@@ -381,15 +345,6 @@ def create_app(config_name):
             response = {'err': 'No access token found'}
             status_code = status.HTTP_400_BAD_REQUEST
             return response, status_code
-#=======
-    @app.route("/search", methods=['GET'])
-    def search_ride():
-        return search_for_ride(request)
-
-    @app.route("/history", methods=['GET'])
-    def get_history():
-        return get_drive_history(request)
-#>>>>>>> master
 
     @app.route("/drive", methods=['GET', 'POST'])
     def drive():
@@ -427,6 +382,23 @@ def create_app(config_name):
             response = {'err': 'No access token found'}
             status_code = status.HTTP_400_BAD_REQUEST
             return response, status_code
+
+    @app.route("/history", methods=['GET'])
+    def history():
+        if 'email' in session:
+            user = User.query.filter_by(email=session['email']).first()
+            rides = Rides.query.filter_by(customer_id=user.user_id).all()
+            return render_template('table.html', rides=rides)
+        else:
+            return redirect('auth')
+
+    @app.route("/user", methods=['GET'])
+    def user_profile():
+        if 'email' in session:
+            user = User.query.filter_by(email=session['email']).first()
+            return render_template('user.html', user=user)
+        else:
+            return redirect('auth')
 
     @app.route("/payment", methods=['GET'])
     def payment():

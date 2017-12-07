@@ -183,9 +183,16 @@ def create_app(config_name):
                         }
                 return response, status.HTTP_201_CREATED
             else:
+                # If drier redirect to the search
+                user = User.query.filter_by(
+                        email=session['email']
+                        ).first()
+                if user.driver:
+                    return redirect('search')
+
                 return render_template('maps.html', requestingFlag=True)
         else:
-            return render_template('register.html', requestingFlag=True)
+            return redirect('auth')
 
     @app.route("/waiting", methods=['GET'])
     def waiting():

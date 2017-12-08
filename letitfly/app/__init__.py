@@ -209,6 +209,8 @@ def create_app(config_name):
                     time_finished=None
                     ).first()
 
+            print("+++++++++++++++++++++++")
+            print(ride)
             # If the ride.driver is null and
             # not picked up
             # not finished

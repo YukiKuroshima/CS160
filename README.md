@@ -4,62 +4,8 @@
 # Install
 Before start, make sure that virtualenv and mysql are installed on your machine
 ## For virtualenv do the command below
-```
-$ pip install virtualenv
-```
-and check this tutorial https://scotch.io/tutorials/build-a-restful-api-with-flask-the-tdd-way
 
-Copy the belew commands and hit enter by like at a time.
-```
-git clone https://github.com/YukiKuroshima/CS160.git
-cd CS160/letitfly/
-pip install -r requirements.txt
-touch .env
-open .env
-```
-Your text editor will open up and copy paste 
-```
-source venv/bin/activate
-export FLASK_APP="run.py"
-export SECRET="some-very-long-string-of-random-characters-CHANGE-TO-YOUR-LIKING"
-export APP_SETTINGS="development"
-export DATABASE_URL="mysql://<username>:<password>@localhost/flask_api"
-export TEST_DATABASE_URL="mysql://<username>:<password>@localhost/test_flask_api"
-```
-Make sure to change the <username> and <password> to your MySQL username and password
-For example
-```
-source venv/bin/activate
-export FLASK_APP="run.py"
-export SECRET="some-very-long-string-of-random-characters-CHANGE-TO-YOUR-LIKING"
-export APP_SETTINGS="development"
-export DATABASE_URL="mysql://root:rootpasswd@localhost/flask_api"
-export TEST_DATABASE_URL="mysql://root:rootpasswd@localhost/test_flask_api"
-```
-Log into your MySQL and create two databases
-```
-mysql -u root -p
-create database flask_api;
-create database test_flask_api;
-quit
-```
-Now go back to letitfly dir and run migration command
-```
-python manage.py db init
-python manage.py db migrate
-python manage.py db upgrade
-```
-If succeeded, you will see two tables created in flask_api database.
-And now you are ready to run localhost server!
-```
-python run.py
-```
-and go to localhost:5000 on your browser
-
-```
-python manage.py test
-```
-to run all the test cases
+Please see userguide.pdf
 
 # Database schema
 ## User

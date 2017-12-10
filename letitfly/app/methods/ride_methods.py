@@ -5,6 +5,8 @@ from app.models.users_model import Rides
 Find all imcomplted (Not picked up yet) ride requests and
 return them as a list
 """
+
+
 def find_all_not_picked_up_rides_in_json():
     try:
         rides = Rides.query.filter_by(

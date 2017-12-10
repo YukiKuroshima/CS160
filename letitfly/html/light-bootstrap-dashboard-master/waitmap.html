@@ -121,7 +121,28 @@
         Driver location: {{ driverpos.lng }}
         </p>
         {% endif %}
+        {% if pickedUpFlag %}
+        <p>
+        You have been picked up.
+        </p>
+        {% endif %}
+
+        {% if paymentFlag %}
+        <h4>
+            You have reached your destination.
+            Thank you for using Let It Fly!
+        </h4>
+        {% endif %}
+
         <div id="info"></div>
+
+        {% if paymentFlag %}
+        <p>Need a ride?</p>
+
+        <button onclick=redirectTo('request') class='btn btn-info btn-fill'>Request</button
+
+        {% endif %}
+        
         <div id="map"></div>
     </div>
 </div>
@@ -154,19 +175,43 @@
 	<script src="assets/js/usermap.js"></script>
 	<script src="assets/js/lookForDriver.js"></script>
 	<script src="assets/js/driverfound.js"></script>
-
+	<script src="assets/js/refreashPage.js"></script>
+    
+    {% if paymentFlag %}
+	<script src="assets/js/payment.js"></script>
+    {% endif %}
     <script>
         $().ready(function(){
+
+
             <!-- Only load this when taking care of user requesting ride -->
             {% if requestingFlag %}
             usermap.initGoogleMaps();
             {% endif %}
+
             <!-- Only load this after user requested a ride and waiting driver to accept (Looking for a driver to pick them up) -->
             {% if requestedFlag %}
             lookForDriver.initGoogleMaps();
+            refreashPage.run(10000);
             {% endif %}
+
             {% if driverFoundFlag %}
             driverfound.initGoogleMaps({{driverpos.lat}}, {{driverpos.lng}});
+            refreashPage.run(10000);
+            {% endif %}
+
+            {% if pickedUpFlag %}
+            driverfound.initGoogleMaps({{driverpos.lat}}, {{driverpos.lng}});
+            refreashPage.run(10000);
+            {% endif %}
+
+            {% if finishedFlag %}
+            window.location.href = "payment";
+            {% endif %}
+
+            {% if paymentFlag %}
+            var data = {{ ride|tojson }};
+            payment.initGoogleMaps(data);
             {% endif %}
         });
     </script>

@@ -124,7 +124,7 @@
         {% if paymentFlag %}
         <p>Search and pick up more people?</p>
 
-        <button onclick=redirectTo('search') class='btn btn-info btn-fill'>Search</button>
+        <button onclick=redirectTo('search') class='btn btn-info btn-fill'>Search</button
 
         {% endif %}
 
@@ -159,6 +159,7 @@
 
     {% if searchFlag %}
 	<script src="assets/js/search.js"></script>
+	<script src="assets/js/refreashPage.js"></script>
     {% endif %}
     {% if pickupFlag %}
 	<script src="assets/js/pickup.js"></script>
@@ -175,15 +176,21 @@
             {% if searchFlag %}
             var data = {{ rides|tojson }};
             search.initGoogleMaps(data);
+            // refreash page every 10 second
+            refreashPage.run(10000);
             {% endif %}
+
             {% if pickupFlag %}
             var data = {{ ride|tojson }};
             pickup.initGoogleMaps(data);
             {% endif %}
+
             {% if driveFlag %}
             var data = {{ ride|tojson }};
             drive.initGoogleMaps(data);
             {% endif %}
+            
+
             {% if paymentFlag %}
             var data = {{ ride|tojson }};
             payment.initGoogleMaps(data);

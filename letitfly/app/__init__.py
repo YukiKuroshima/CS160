@@ -157,13 +157,14 @@ def create_app(config_name):
 
     @app.route("/request", methods=['POST', 'GET'])
     def request_ride():
-        # access_token = parse_access_token(request)
-        # Access token found
-        
         if 'email' in session:
-            # user_id = User.decode_token(request.cookies.get(''))
-            # user_id = User.decode_token(access_token)
-            # Token is valid
+            # If user is a driver redirect to search
+            user = User.query.filter_by(
+                    email=session['email']
+                    ).first()
+            if user.driver:
+                return redirect('search')
+
             if request.method == 'POST':
                 # Decode access token and get user_id that
                 # belongs to the user who requested the ride
@@ -178,18 +179,14 @@ def create_app(config_name):
                         end_location=ride_data['end_location'],
                         )
                 temp_ride.save()
+                # Store ride_id in session
+                session['rider_ride_id'] = temp_ride.ride_id
+
                 response = {
                         'message': 'Ride request created'
                         }
                 return response, status.HTTP_201_CREATED
             else:
-                # If drier redirect to the search
-                user = User.query.filter_by(
-                        email=session['email']
-                        ).first()
-                if user.driver:
-                    return redirect('search')
-
                 return render_template('maps.html', requestingFlag=True)
         else:
             return redirect('auth')
@@ -200,17 +197,28 @@ def create_app(config_name):
         if 'email' in session:
             # Token is valid
             # Find client
-            user = User.query.filter_by(
-                    email=session['email']
-                    ).first()
+
+            # user = User.query.filter_by(
+            #         email=session['email']
+            #         ).first()
+
             # Find the ride assosiated with the client
+            # ride = Rides.query.filter_by(
+            #         customer_id=user.user_id,
+            #         time_finished=None
+            #         ).first()
+
+            # If rider_ride_id is not in seesion
+            # it means that rider did not request a ride
+            if 'rider_ride_id' not in session:
+                redirect('request')
+
             ride = Rides.query.filter_by(
-                    customer_id=user.user_id,
-                    time_finished=None
+                    ride_id=session['rider_ride_id']
                     ).first()
 
             print("+++++++++++++++++++++++")
-            print(ride)
+            print(ride.tojson())
             # If the ride.driver is null and
             # not picked up
             # not finished
@@ -241,6 +249,44 @@ def create_app(config_name):
                 return render_template(
                         'waitmap.html',
                         driverFoundFlag=True,
+                        start=ride.start_location,
+                        driverpos={'lat': ride.current_lat, 'lng': ride.current_lng},
+                        end=ride.end_location,
+                        )
+            elif ride.driver_id is not None and \
+                 ride.picked_up is True and \
+                 ride.time_finished is None:
+                # ride.time_finished is None:
+                # Render html with driver found
+                # Show where the driver is
+                # Refresh the page periodically
+                # TODO If driver_id is NOT null and picked_up = True
+                # Show rider is picked up
+                # TODO if driver id is NOT null and picked up = True and finished_date is NOT null
+                # Show the rider amount they paid
+                return render_template(
+                        'waitmap.html',
+                        pickedUpFlag=True,
+                        start=ride.start_location,
+                        driverpos={'lat': ride.current_lat, 'lng': ride.current_lng},
+                        end=ride.end_location,
+                        )
+
+            elif ride.driver_id is not None and \
+                 ride.picked_up is True and \
+                 ride.time_finished is not None:
+                # ride.time_finished is None:
+                # Render html with driver found
+                # Show where the driver is
+                # Refresh the page periodically
+                # TODO If driver_id is NOT null and picked_up = True
+                # Show rider is picked up
+                # TODO if driver id is NOT null and picked up = True and finished_date is NOT null
+                # Show the rider amount they paid
+                print('redirect payment')
+                return render_template(
+                        'waitmap.html',
+                        finishedFlag=True,
                         start=ride.start_location,
                         driverpos={'lat': ride.current_lat, 'lng': ride.current_lng},
                         end=ride.end_location,
@@ -411,14 +457,28 @@ def create_app(config_name):
             # Driver can see the money they earned
             # Driver can click a button to go /search
             # to find another ride and start ride again
-            ride = Rides.query.filter_by(
-                    ride_id=session['ride_id']
-                    ).first()
-            return render_template(
-                    'drivermap.html',
-                    ride=ride.tojson(),
-                    paymentFlag=True,
-                    )
+            user = User.query.filter_by(email=session['email']).first()
+            if user.driver:
+                ride = Rides.query.filter_by(
+                        ride_id=session['ride_id']
+                        ).first()
+                
+                session.pop('ride_id', None)
+                return render_template(
+                        'drivermap.html',
+                        ride=ride.tojson(),
+                        paymentFlag=True,
+                        )
+            else:
+                ride = Rides.query.filter_by(
+                        ride_id=session['rider_ride_id']
+                        ).first()
+                session.pop('rider_ride_id', None)
+                return render_template(
+                        'waitmap.html',
+                        ride=ride.tojson(),
+                        paymentFlag=True,
+                        )
 
         else:
             redirect('auth')
